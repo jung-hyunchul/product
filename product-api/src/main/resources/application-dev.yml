@@ -1,0 +1,99 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    is-debug: true
+  datasource:
+    writer:
+      hikari:
+        jdbc-url: jdbc:mysql://global-order-db-w.dev.id-us.me:3306/order?characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
+        username: ${RDS_GLOBAL_MASTER_USER}
+        password: ${RDS_GLOBAL_MASTER_PW}
+        pool-name: api-pool-write
+        minimum-idle: 5
+        maximum-pool-size: 10
+        connection-timeout: 5000
+        data-source-properties:
+          idleTimeout: ${DB_IDLE_TIMEOUT:600000}
+          maxLifetime: ${DB_MAX_LIFETIME:1800000}
+          minimumIdle: ${DB_MINIMUM_IDLE:5}
+          cachePrepStmts: true
+          prepStmtCacheSize: 250
+          prepStmtCacheSqlLimit: 2048
+          useServerPrepStmts: true
+        connection-test-query: select 1
+        auto-commit: false
+    reader:
+      hikari:
+        jdbc-url: jdbc:mysql://global-order-db-ro.dev.id-us.me:3306/order?characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&useLegacyDatetimeCode=false
+        username: ${RDS_GLOBAL_SLAVE_USER}
+        password: ${RDS_GLOBAL_SLAVE_PW}
+        pool-name: api-pool-reader
+        minimum-idle: 5
+        maximum-pool-size: 10
+        connection-timeout: 5000
+        data-source-properties:
+          idleTimeout: ${DB_IDLE_TIMEOUT:600000}
+          maxLifetime: ${DB_MAX_LIFETIME:1800000}
+          minimumIdle: ${DB_MINIMUM_IDLE:5}
+          cachePrepStmts: true
+          prepStmtCacheSize: 250
+          prepStmtCacheSqlLimit: 2048
+          useServerPrepStmts: true
+        connection-test-query: select 1
+        auto-commit: false
+        read-only: true
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    properties:
+      hibernate.globally_quoted_identifiers: true
+      hibernate.globally_quoted_identifiers_skip_column_definitions: true
+
+#logging:
+#  config: classpath:log4j2/idus-log4j2-dev-json.xml
+
+management:
+  health:
+    redis:
+      enabled: false
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+  endpoints:
+    enabled-by-default: true
+
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  show-actuator: false
+  writer-with-default-pretty-printer: false
+  api-docs:
+    enabled: ${SPRINGDOC_API_DOCS_ENABLED:true}
+    resolve-schema-properties: true
+    path: /docs/openapi
+  swagger-ui:
+    enabled: ${SPRINGDOC_SWAGGER_ENABLED:true}
+    path: /docs/swagger
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: ${SPRING_FEIGN_CLIENT_CONFIG_DEFAULT_CONNECT_TIMEOUT:10000}
+        readTimeout: ${SPRING_FEIGN_CLIENT_DEFAULT_READ_TIMEOUT:10000}
+        loggerLevel: ${SPRING_FEIGN_CLIENT_DEFAULT_LOGGER_LEVEL:HEADERS}
+  httpclient:
+    enabled: true
+  compression:
+    request:
+      enabled: false
+    response:
+      enabled: false
