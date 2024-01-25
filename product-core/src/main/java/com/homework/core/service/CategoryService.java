@@ -23,6 +23,15 @@ public class CategoryService {
             .build());
   }
 
+  @Transactional(readOnly = true)
+  public Optional<CategoryDto> getCategoryById(Long id) {
+    return categoryRepository.findById(id)
+        .map(e -> CategoryDto.builder()
+            .id(e.getId())
+            .name(e.getName())
+            .build());
+  }
+
   @Transactional
   public CategoryEntity saveCategory(CategoryDto request) {
     CategoryEntity category = categoryRepository.findByName(request.getName())

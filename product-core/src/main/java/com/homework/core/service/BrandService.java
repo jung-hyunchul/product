@@ -23,6 +23,15 @@ public class BrandService {
             .build());
   }
 
+  @Transactional(readOnly = true)
+  public Optional<BrandDto> getBrandById(Long id) {
+    return brandRepository.findById(id)
+        .map(e -> BrandDto.builder()
+            .id(e.getId())
+            .name(e.getName())
+            .build());
+  }
+
   @Transactional
   public BrandEntity saveBrand(BrandDto request) {
     BrandEntity brand = brandRepository.findByName(request.getName())

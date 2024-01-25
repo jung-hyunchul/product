@@ -1,8 +1,11 @@
 package com.homework.core.service;
 
 import com.homework.core.dto.ProductDto;
+import com.homework.core.entity.BrandEntity;
 import com.homework.core.entity.CategoryEntity;
 import com.homework.core.entity.ProductEntity;
+import com.homework.core.exception.BusinessException;
+import com.homework.core.repository.BrandRepository;
 import com.homework.core.repository.CategoryRepository;
 import com.homework.core.repository.ProductQuerydslRepository;
 import com.homework.core.repository.ProductRepository;
@@ -20,6 +23,7 @@ public class ProductService {
   private final ProductRepository productRepository;
   private final CategoryRepository categoryRepository;
   private final ProductQuerydslRepository productQuerydslRepository;
+  private final BrandRepository brandRepository;
 
   @Transactional(readOnly = true)
   public List<ProductDto> getLeastExpensiveProducts() {
@@ -54,5 +58,26 @@ public class ProductService {
   @Transactional(readOnly = true)
   public ProductDto getLeastExpensiveProductOfCategory(String categoryName) {
     return productQuerydslRepository.findLeastExpensiveProduct(categoryName);
+  }
+
+  @Transactional
+  public ProductEntity saveProduct(ProductDto request) {
+    CategoryEntity category = categoryRepository.findById(request.getCategoryId())
+        .orElseThrow(
+            () -> new BusinessException(400,
+                String.format("category id %s not found", request.getCategoryId())));
+    BrandEntity brand = brandRepository.findById(request.getBrandId())
+        .orElseThrow(
+            () -> new BusinessException(400,
+                String.format("brand id %s not found", request.getBrandId())));
+
+    ProductEntity product = productRepository.findByCategoryAndBrand(category, brand)
+        .orElse(ProductEntity.builder()
+            .category(category)
+            .brand(brand)
+            .price(request.getPrice())
+            .build());
+
+    return productRepository.save(product);
   }
 }

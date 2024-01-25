@@ -1,11 +1,14 @@
 package com.homework.api.controller;
 
+import com.homework.api.controller.request.ProductRequest;
 import com.homework.api.controller.response.LeastExpensiveBrandResponse;
+import com.homework.api.controller.response.ProductResponse;
 import com.homework.api.controller.response.ProductsLeastExpensiveResponse;
 import com.homework.api.controller.response.ProductsOfMinMaxResponse;
 import com.homework.api.exception.ExceptionResponse;
 import com.homework.core.dto.ProductDto;
 import com.homework.core.exception.BusinessException;
+import com.homework.core.service.BrandService;
 import com.homework.core.service.CategoryService;
 import com.homework.core.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,11 +17,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +43,7 @@ public class ProductController {
 
   private final ProductService productService;
   private final CategoryService categoryService;
+  private final BrandService brandService;
 
   @Operation(
       summary = "카테고리 별 최저가격 조회",
@@ -117,5 +124,34 @@ public class ProductController {
     ProductDto lowest = productService.getLeastExpensiveProductOfCategory(categoryName);
 
     return ProductsOfMinMaxResponse.of(categoryName, highest, lowest);
+  }
+
+  @Operation(
+      summary = "product 저장",
+      description =
+          "product 저장. 동일한 category, brand 에는 하나의 product만 저장할 수 있음. 이미 존재하는 product 이면 price 만 수정해서 저장."
+              + "존재하지 않는 product 이면 새로 생성"
+  )
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "조회 성공",
+          content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ProductResponse.class)
+              )
+          }
+      )
+  })
+  @PostMapping(value = "")
+  public ProductResponse saveBrand(@RequestBody @Valid ProductRequest request) {
+    ProductDto product = ProductDto.builder()
+        .categoryId(request.getCategoryId())
+        .brandId(request.getBrandId())
+        .price(request.getPrice())
+        .build();
+
+    return ProductResponse.of(productService.saveProduct(product));
   }
 }

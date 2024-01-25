@@ -23,6 +23,7 @@ create table product
     name        varchar(100) default null,
     PRIMARY KEY (id)
 );
+CREATE UNIQUE INDEX idx_category_brand ON product (category_id, brand_id);
 CREATE INDEX idx_brand_id ON product (brand_id);
 CREATE INDEX idx_category_id ON product (category_id);
 CREATE INDEX idx_name ON product (name);

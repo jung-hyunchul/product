@@ -70,49 +70,4 @@ public class ProductQuerydslRepository extends QuerydslRepositorySupport {
         .fetchOne();
   }
 
-//
-//  public Optional<SettlementSchedule> findByTargetMonthAndBaselineDate(
-//      YearMonth targetMonth, LocalDate baselineDate, SettlementSchedule.Type type,
-//      List<SettlementSchedule.Status> statuses
-//  ) {
-//    SettlementSchedule schedule = jpaQueryFactory.selectFrom(settlementSchedule)
-//        .where(
-//            settlementSchedule.targetMonth.eq(targetMonth),
-//            settlementSchedule.baselineDate.eq(baselineDate),
-//            settlementSchedule.type.eq(type),
-//            settlementSchedule.status.in(statuses)
-//        )
-//        .distinct()
-//        .fetchOne();
-//
-//    return Optional.ofNullable(schedule);
-//  }
-//
-//  public Optional<Long> fetchIdsByTargetMonthAndBaselineDate(YearMonth targetMonth,
-//      LocalDate baselineDate) {
-//    return Optional.ofNullable(
-//        jpaQueryFactory.select(settlementSchedule.id)
-//            .from(settlementSchedule)
-//            .where(
-//                settlementSchedule.targetMonth.eq(targetMonth),
-//                settlementSchedule.baselineDate.eq(baselineDate),
-//                settlementSchedule.status.in(Status.getCompletedStatuses())
-//            )
-//            .distinct()
-//            .fetchOne()
-//    );
-//  }
-//
-//  public List<SettlementSchedule> findAllByTargetMonthAndType(YearMonth targetMonth,
-//      SettlementSchedule.Type type) {
-//
-//    return jpaQueryFactory.selectFrom(settlementSchedule)
-//        .where(
-//            settlementSchedule.targetMonth.eq(targetMonth),
-//            settlementSchedule.type.eq(type),
-//            settlementSchedule.status.in(Status.getCompletedStatuses())
-//        )
-//        .orderBy(settlementSchedule.baselineDate.desc())
-//        .fetch();
-//  }
 }

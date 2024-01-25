@@ -1,11 +1,15 @@
 package com.homework.core.repository;
 
+import com.homework.core.entity.BrandEntity;
 import com.homework.core.entity.CategoryEntity;
 import com.homework.core.entity.ProductEntity;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
+
+  Optional<ProductEntity> findByCategoryAndBrand(CategoryEntity category, BrandEntity brand);
 
   ProductEntity findTopByCategoryOrderByPriceAsc(CategoryEntity category);
 
