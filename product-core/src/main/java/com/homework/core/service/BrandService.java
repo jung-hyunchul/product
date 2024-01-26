@@ -3,7 +3,9 @@ package com.homework.core.service;
 import com.homework.core.dto.BrandDto;
 import com.homework.core.entity.BrandEntity;
 import com.homework.core.repository.BrandRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,16 @@ public class BrandService {
             .id(e.getId())
             .name(e.getName())
             .build());
+  }
+
+  @Transactional(readOnly = true)
+  public List<BrandDto> getBrands() {
+    return brandRepository.findAll().stream()
+        .map(e -> BrandDto.builder()
+            .id(e.getId())
+            .name(e.getName())
+            .build())
+        .collect(Collectors.toList());
   }
 
   @Transactional(readOnly = true)

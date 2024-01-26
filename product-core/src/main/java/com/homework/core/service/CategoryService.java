@@ -3,7 +3,9 @@ package com.homework.core.service;
 import com.homework.core.dto.CategoryDto;
 import com.homework.core.entity.CategoryEntity;
 import com.homework.core.repository.CategoryRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,16 @@ public class CategoryService {
             .id(e.getId())
             .name(e.getName())
             .build());
+  }
+
+  @Transactional(readOnly = true)
+  public List<CategoryDto> getCategories() {
+    return categoryRepository.findAll().stream()
+        .map(e -> CategoryDto.builder()
+            .id(e.getId())
+            .name(e.getName())
+            .build())
+        .collect(Collectors.toList());
   }
 
   @Transactional(readOnly = true)

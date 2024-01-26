@@ -1,14 +1,14 @@
 # 구현범위
 
-과제 4개에 해당하는 기능
-카테고리 저장, 조회
-브랜드 저장, 조회
-상품 저장, 조회
-카테고리, 브랜드 당 하나의 상품만 존재함
-controller 의 단위테스트 (mock 테스트)
-service 의 단위테스트 (mock 테스트)
-datasource 를 reader, writer 로 구분
-swagger-ui 적용
+* 과제 4개에 해당하는 기능
+* 카테고리 저장, 조회
+* 브랜드 저장, 조회
+* 상품 저장, 조회
+* 카테고리, 브랜드 당 하나의 상품만 존재함
+* controller 의 단위테스트 (mock 테스트)
+* service 의 단위테스트 (mock 테스트)
+* datasource 를 reader, writer 로 구분
+* swagger-ui 적용
 
 # 실행방법
 
