@@ -28,7 +28,7 @@ public class ProductRequest {
   @Schema(
       description = "가격",
       requiredMode = Schema.RequiredMode.REQUIRED,
-      example = "2"
+      example = "10000"
   )
   @NotNull
   private Long price;

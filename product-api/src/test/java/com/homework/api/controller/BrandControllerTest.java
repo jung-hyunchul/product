@@ -13,6 +13,7 @@ import com.homework.api.exception.CommonExceptionHandler;
 import com.homework.core.dto.BrandDto;
 import com.homework.core.entity.BrandEntity;
 import com.homework.core.service.BrandService;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,6 +89,27 @@ class BrandControllerTest {
         .andExpect(status().isInternalServerError())
         .andExpect(jsonPath("$.status").value("INTERNAL_SERVER_ERROR"))
         .andExpect(jsonPath("$.message").value("서버 오류"));
+  }
+
+  @Test
+  public void getBrands() throws Exception {
+    BrandDto brand1 = mock(BrandDto.class);
+    when(brand1.getId()).thenReturn(1L);
+    when(brand1.getName()).thenReturn("무신사");
+
+    BrandDto brand2 = mock(BrandDto.class);
+    when(brand2.getId()).thenReturn(2L);
+    when(brand2.getName()).thenReturn("나이키");
+
+    when(brandService.getBrands()).thenReturn(List.of(brand1, brand2));
+
+    mockMvc.perform(get("/api/v1/brands")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].id").value("1"))
+        .andExpect(jsonPath("$[0].name").value("무신사"))
+        .andExpect(jsonPath("$[1].id").value("2"))
+        .andExpect(jsonPath("$[1].name").value("나이키"));
   }
 
   @Test

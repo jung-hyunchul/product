@@ -10,12 +10,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,7 +64,7 @@ public class CategoryController {
       )
   })
   @GetMapping(value = "/{categoryName}")
-  public ResponseEntity<CategoryResponse> getProductsOfLowestPrice(
+  public ResponseEntity<CategoryResponse> getCategory(
       @PathVariable String categoryName) {
     CategoryDto category = categoryService.getCategory(categoryName)
         .orElseThrow(
@@ -69,6 +72,29 @@ public class CategoryController {
                 String.format("category %s not found", categoryName)));
 
     return ResponseEntity.ok(CategoryResponse.of(category));
+  }
+
+  @Operation(
+      summary = "카테고리 리스트 조회",
+      description = "카테고리 리스트 조회"
+  )
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "카테고리 리스트 조회 성공",
+          content = {
+              @Content(
+                  mediaType = "application/json",
+                  array = @ArraySchema(schema = @Schema(implementation = CategoryResponse.class))
+              )
+          }
+      )
+  })
+  @GetMapping(value = "")
+  public ResponseEntity<List<CategoryResponse>> getCategories() {
+    return ResponseEntity.ok(categoryService.getCategories().stream()
+        .map(CategoryResponse::of)
+        .collect(Collectors.toList()));
   }
 
   @Operation(

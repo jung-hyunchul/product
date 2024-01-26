@@ -13,6 +13,7 @@ import com.homework.api.exception.CommonExceptionHandler;
 import com.homework.core.dto.CategoryDto;
 import com.homework.core.entity.CategoryEntity;
 import com.homework.core.service.CategoryService;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,8 +59,8 @@ class CategoryControllerTest {
   }
 
   @Test
-  @DisplayName("브랜드가 존재할 경우")
-  public void getBrand() throws Exception {
+  @DisplayName("카테고리가 존재할 경우")
+  public void getCategory() throws Exception {
     CategoryDto category = mock(CategoryDto.class);
     when(category.getId()).thenReturn(1L);
     when(category.getName()).thenReturn("양말");
@@ -74,8 +75,29 @@ class CategoryControllerTest {
   }
 
   @Test
-  @DisplayName("브랜드 저장이 실패할 경우")
-  public void saveBrand_fail() throws Exception {
+  public void getCategories() throws Exception {
+    CategoryDto category1 = mock(CategoryDto.class);
+    when(category1.getId()).thenReturn(1L);
+    when(category1.getName()).thenReturn("양말");
+
+    CategoryDto category2 = mock(CategoryDto.class);
+    when(category2.getId()).thenReturn(2L);
+    when(category2.getName()).thenReturn("상의");
+
+    when(categoryService.getCategories()).thenReturn(List.of(category1, category2));
+
+    mockMvc.perform(get("/api/v1/categories")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].id").value("1"))
+        .andExpect(jsonPath("$[0].name").value("양말"))
+        .andExpect(jsonPath("$[1].id").value("2"))
+        .andExpect(jsonPath("$[1].name").value("상의"));
+  }
+
+  @Test
+  @DisplayName("카테고리 저장이 실패할 경우")
+  public void saveCategory_fail() throws Exception {
     when(categoryService.saveCategory(any())).thenThrow(new RuntimeException("서버 오류"));
 
     String requestContent = objectMapper.writeValueAsString(Map.of(
@@ -91,8 +113,8 @@ class CategoryControllerTest {
   }
 
   @Test
-  @DisplayName("브랜드 저장 성공")
-  public void saveBrand() throws Exception {
+  @DisplayName("카테고리 저장 성공")
+  public void saveCategory() throws Exception {
     CategoryEntity entity = mock(CategoryEntity.class);
     when(entity.getId()).thenReturn(1L);
     when(entity.getName()).thenReturn("양말");
