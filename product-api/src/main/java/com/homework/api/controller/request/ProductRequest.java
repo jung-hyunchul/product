@@ -2,9 +2,11 @@ package com.homework.api.controller.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class ProductRequest {
 
   @Schema(
