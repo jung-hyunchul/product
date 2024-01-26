@@ -1,16 +1,24 @@
 package com.homework.api.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.homework.api.controller.request.ProductRequest;
 import com.homework.api.exception.CommonExceptionHandler;
 import com.homework.core.dto.CategoryDto;
 import com.homework.core.dto.ProductDto;
+import com.homework.core.entity.BrandEntity;
+import com.homework.core.entity.CategoryEntity;
+import com.homework.core.entity.ProductEntity;
 import com.homework.core.service.CategoryService;
 import com.homework.core.service.ProductService;
 import java.util.List;
@@ -149,5 +157,33 @@ class ProductControllerTest {
         .andExpect(jsonPath("$.최저가[0].가격").value("1,000"))
         .andExpect(jsonPath("$.최고가[0].브랜드").value("무신사"))
         .andExpect(jsonPath("$.최고가[0].가격").value("10,000"));
+  }
+
+  @Test
+  public void saveBrand() throws Exception {
+    CategoryEntity categoryEntity = mock(CategoryEntity.class);
+    BrandEntity brandEntity = mock(BrandEntity.class);
+    ProductEntity productEntity = mock(ProductEntity.class);
+    when(productEntity.getId()).thenReturn(100L);
+    when(productEntity.getCategory()).thenReturn(categoryEntity);
+    when(productEntity.getBrand()).thenReturn(brandEntity);
+    when(productService.saveProduct(any())).thenReturn(productEntity);
+
+    ProductRequest request = ProductRequest.builder()
+        .categoryId(1L)
+        .brandId(2L)
+        .price(10_000L)
+        .build();
+
+    mockMvc.perform(post("/api/v1/products")
+            .content(objectMapper.writeValueAsString(request))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value("100"));
+
+    verify(productService, times(1)).saveProduct(argThat(
+        e -> e.getCategoryId().equals(1L) && e.getBrandId().equals(2L) && e.getPrice()
+            .equals(10_000L)
+    ));
   }
 }

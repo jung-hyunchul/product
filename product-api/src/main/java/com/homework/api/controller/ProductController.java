@@ -144,7 +144,7 @@ public class ProductController {
           }
       )
   })
-  @PostMapping(value = "")
+  @PostMapping
   public ProductResponse saveBrand(@RequestBody @Valid ProductRequest request) {
     ProductDto product = ProductDto.builder()
         .categoryId(request.getCategoryId())
