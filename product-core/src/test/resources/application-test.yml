@@ -55,6 +55,3 @@ spring:
     properties:
       hibernate.globally_quoted_identifiers: true
       hibernate.globally_quoted_identifiers_skip_column_definitions: true
-
-#logging:
-#  config: classpath:log4j2/idus-log4j2-local.xml

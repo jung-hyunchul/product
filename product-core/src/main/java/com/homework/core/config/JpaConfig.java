@@ -45,7 +45,6 @@ public class JpaConfig {
         "hibernate.implicit_naming_strategy", properties.getNaming().getImplicitStrategy(),
         "hibernate.physical_naming_strategy", properties.getNaming().getPhysicalStrategy(),
         "hibernate.hbm2ddl.auto", properties.getDdlAuto()
-//        "hibernate.resource.beans.container", new SpringBeanContainer(beanFactory)
     ));
 
     return factoryBean;
