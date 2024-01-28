@@ -3,6 +3,7 @@ spring:
     name: ${SPRING_APPLICATION_NAME:api}
     description: ${SPRING_APPLICATION_DESCRIPTION:api-server}
     is-debug: false
+    encoding: UTF-8
 
   #  servlet:
   #    multipart:

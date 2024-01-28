@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  application:
+    is-debug: true
+
   h2:
     console:
       enabled: true
@@ -9,8 +12,6 @@ spring:
       settings:
         trace: false
 
-  application:
-    is-debug: true
   datasource:
     writer:
       hikari:
@@ -63,6 +64,8 @@ spring:
   sql:
     init:
       mode: always
+      encoding: UTF-8
+        
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
