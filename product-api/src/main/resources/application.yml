@@ -5,10 +5,6 @@ spring:
     is-debug: false
     encoding: UTF-8
 
-  #  servlet:
-  #    multipart:
-  #      max-file-size: ${SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE:256MB}
-  #      max-request-size: ${SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE:256MB}
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -27,35 +23,15 @@ spring:
   sql:
     init:
       mode: never
-  #  main:
-  #    allow-circular-references: false
-  #    log-startup-info: false
-  #    banner-mode: off
   devtools:
     restart:
       enabled: false
-  #  data:
-  #    web:
-  #      pageable:
-  #        max-page-size: ${SPRING_DATA_WEB_PAGEABLE_MAX_PAGE_SIZE:200}
-  #        one-indexed-parameters: false
-  jpa:
-    open-in-view: false
-    generate-ddl: false
-    hibernate:
-      ddl-auto: validate
-      naming:
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
   exception-handler:
     debug:
       echo: false
       enabled: false
     response-body: global
     response-type: normal
-
-#logging:
-#  config: classpath:log4j2/idus-log4j2.xml
 
 springdoc:
   default-consumes-media-type: application/json
