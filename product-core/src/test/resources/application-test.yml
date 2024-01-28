@@ -1,0 +1,57 @@
+server:
+  port: 8080
+
+spring:
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:/data.sql
+      schema-locations: classpath:/schema.sql
+      encoding: UTF-8
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        trace: false
+
+  application:
+    is-debug: true
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem:product;mode=mysql;database_to_lower=true;
+      driver-class-name: org.h2.Driver
+      username: product
+      password: product
+      pool-name: api-pool-writer
+      minimum-idle: 2
+      maximum-pool-size: 2
+      connection-timeout: 5000
+      data-source-properties:
+        idleTimeout: ${DB_IDLE_TIMEOUT:600000}
+        maxLifetime: ${DB_MAX_LIFETIME:1800000}
+        minimumIdle: ${DB_MINIMUM_IDLE:5}
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+      connection-test-query: select 1
+      auto-commit: false
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+
+    open-in-view: false
+    generate-ddl: false
+    show-sql: true
+
+    hibernate:
+      ddl-auto: none
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate.globally_quoted_identifiers: true
+      hibernate.globally_quoted_identifiers_skip_column_definitions: true

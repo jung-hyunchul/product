@@ -41,7 +41,7 @@ public class DatasourceConfig {
 
   @Bean
   @Primary
-  DataSource dataSource() {
+  DataSource productDataSource() {
     return new LazyConnectionDataSourceProxy(dynamicDataSource());
   }
 }
