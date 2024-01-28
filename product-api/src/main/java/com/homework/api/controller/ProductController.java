@@ -8,7 +8,6 @@ import com.homework.api.controller.response.ProductsOfMinMaxResponse;
 import com.homework.api.exception.ExceptionResponse;
 import com.homework.core.dto.ProductDto;
 import com.homework.core.exception.BusinessException;
-import com.homework.core.service.BrandService;
 import com.homework.core.service.CategoryService;
 import com.homework.core.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +42,6 @@ public class ProductController {
 
   private final ProductService productService;
   private final CategoryService categoryService;
-  private final BrandService brandService;
 
   @Operation(
       summary = "카테고리 별 최저가격 조회",
