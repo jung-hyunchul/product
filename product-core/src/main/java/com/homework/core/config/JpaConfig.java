@@ -11,7 +11,6 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.hibernate5.SpringBeanContainer;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -28,7 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class JpaConfig {
 
   private final EntityManagerFactoryBuilder builder;
-  private final DataSource dataSource;
+  private final DataSource productDataSource;
   private final JpaVendorAdapter vendorAdapter;
 
   private final HibernateProperties properties;
@@ -38,15 +37,15 @@ public class JpaConfig {
       ConfigurableListableBeanFactory beanFactory
   ) {
     LocalContainerEntityManagerFactoryBean factoryBean = builder
-        .dataSource(dataSource)
+        .dataSource(productDataSource)
         .packages("com.homework.core.entity")
         .build();
     factoryBean.setJpaVendorAdapter(vendorAdapter);
     factoryBean.setJpaPropertyMap(Map.of(
         "hibernate.implicit_naming_strategy", properties.getNaming().getImplicitStrategy(),
         "hibernate.physical_naming_strategy", properties.getNaming().getPhysicalStrategy(),
-        "hibernate.hbm2ddl.auto", properties.getDdlAuto(),
-        "hibernate.resource.beans.container", new SpringBeanContainer(beanFactory)
+        "hibernate.hbm2ddl.auto", properties.getDdlAuto()
+//        "hibernate.resource.beans.container", new SpringBeanContainer(beanFactory)
     ));
 
     return factoryBean;
