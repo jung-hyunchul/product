@@ -23,7 +23,7 @@ spring boot 3.2.2
 
 http://localhost:8080/docs/swagger
 
-# 테스트
+# 테스트 실행
 
 ./gradlew test
 
