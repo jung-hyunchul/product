@@ -11,15 +11,6 @@ spring:
     format:
       date-time: iso
       date: iso
-  lifecycle:
-    timeout-per-shutdown-phase: 1m
-  sleuth:
-    sampler:
-      probability: ${SPRING_SLEUTH_SAMPLER_PROBABILITY:1.0}
-    async:
-      enabled: true
-    feign:
-      enabled: true
   sql:
     init:
       mode: never

@@ -74,14 +74,3 @@ spring:
     properties:
       hibernate.globally_quoted_identifiers: true
       hibernate.globally_quoted_identifiers_skip_column_definitions: true
-
-management:
-  health:
-    redis:
-      enabled: false
-  endpoint:
-    health:
-      enabled: true
-      show-details: always
-  endpoints:
-    enabled-by-default: true
